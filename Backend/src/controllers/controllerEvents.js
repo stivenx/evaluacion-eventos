@@ -19,7 +19,10 @@ exports.getEventsByDate = async (req, res) => {
         $gte: new Date(startDate),
         $lte: new Date(endDate)
       }
+    }).sort({
+      date: 1
     });
+    
     res.status(200).json(events);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener los eventos por fecha" });
