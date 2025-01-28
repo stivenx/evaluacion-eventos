@@ -11,6 +11,7 @@ import EventDetail from "./pages/eventDetail";
 import Events from "./pages/events";
 import EventCreate from './pages/eventCreate';
 import EventEdit from './pages/eventEdit';
+import SearchEvents from './pages/searchEvents';
 
 
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/events" element={<Events />} />
         <Route path="/event/create" element={<EventCreate />} />
         <Route path="/event/edit/:id" element={<EventEdit />} />
+        <Route path="/search" element={<SearchEvents />} />
 
       </Routes>
       <Footer />

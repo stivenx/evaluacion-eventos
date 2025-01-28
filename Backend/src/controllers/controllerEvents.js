@@ -39,6 +39,21 @@ exports.getEvent = async (req, res) => {
     }
 };
 
+exports.serachEvents = async (req, res) => {
+    try {
+        const { title } = req.params;
+        if (title.length < 3) {
+            alert("El título debe tener al menos 3 caracteres");
+            return res.status(400).json({ message: "El título debe tener al menos 3 caracteres" });
+            
+        }
+        const events = await Events.find({ title: { $regex: title, $options: "i" } });
+        res.status(200).json(events);
+    } catch (error) {
+        res.status(500).json({ message: "Error al buscar los eventos" });
+    }
+};
+
 exports.createEvent = async (req, res) => {
     try {
       const { title, date, time, description, location } = req.body;
