@@ -12,7 +12,11 @@ import Events from "./pages/events";
 import EventCreate from './pages/eventCreate';
 import EventEdit from './pages/eventEdit';
 import SearchEvents from './pages/searchEvents';
-
+import Tareas from './pages/tareas';
+import  TareasCreate from "./pages/tareasCreate";
+import TareasEdit from "./pages/tareasEdit"
+import Users from './pages/users';
+import TareasUser from './pages/tareasUser';
 
 
 //components
@@ -32,6 +36,11 @@ function App() {
         <Route path="/event/create" element={<EventCreate />} />
         <Route path="/event/edit/:id" element={<EventEdit />} />
         <Route path="/search" element={<SearchEvents />} />
+        <Route path="/tareas" element={<Tareas />} />
+        <Route path="/tareas/create" element={<TareasCreate />} />
+        <Route path="/tareas/edit/:id" element={<TareasEdit />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/tareas/user/:id" element={<TareasUser />} />
 
       </Routes>
       <Footer />
