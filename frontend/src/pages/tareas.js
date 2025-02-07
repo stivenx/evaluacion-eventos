@@ -8,9 +8,15 @@ const Tareas = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+      fetchTareas();
+
+  },[]);
+
+  useEffect(() => {
       if (status) {
           fetchTareasByStatus(status);
-      } else {
+      }
+      else {
           fetchTareas();
       }
   }, [status]);
@@ -84,6 +90,7 @@ const Tareas = () => {
                       <th className="px-6 py-3">Status</th>
                       <th className="px-6 py-3">User</th>
                       <th className="px-6 py-3">Edit</th>
+                      <th className="px-6 py-3">Details</th>
                       <th className="px-6 py-3">Delete</th>
                   </tr>
               </thead>
@@ -112,6 +119,12 @@ const Tareas = () => {
                               <td className="px-6 py-4">
                                   <button onClick={() => navigate(`/tareas/edit/${tarea._id}`)} className="text-primary-500 hover:underline">Edit</button>
                               </td>
+                              <td className="px-6 py-4">
+                              <button onClick={() => navigate(`/tarea/${tarea._id}`)} className="text-red-500 hover:underlin|">
+                                    Details
+                                </button>
+                              </td>
+
                               <td className="px-6 py-4">
                                   <button onClick={() => handleDelete(tarea._id)} className="text-red-500 hover:underline">Delete</button>
                               </td>

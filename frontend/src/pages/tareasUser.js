@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import api from "../configApi/api";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 const TareasUser = () => {
     const { id } = useParams();
     const [tareas, setTareas] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchTareas = async () => {
@@ -66,6 +68,17 @@ const TareasUser = () => {
           <p>
             <span className="font-semibold">Prioridad:</span> {tarea.priority}
           </p>
+          <p>
+            <span className="font-semibold">Responsable:</span> {tarea.user.userName}
+          </p>
+          <button
+              onClick={() => navigate(`/tarea/${tarea._id}`)}
+              className="mt-3 inline-block px-4 py-2 text-white bg-blue-500 rounded-md 
+                        hover:bg-blue-600 transition-all duration-300 shadow-md"
+            >
+              Ver tarea
+          </button>
+
         </div>
 
         <hr className="mt-4 border-gray-300 dark:border-gray-700" />

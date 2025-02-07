@@ -46,7 +46,7 @@ const TareasEdit = () => {
         try {
          
     
-          const response = await api.post('/tareas/', {
+          const response = await api.patch(`/tareas/update/${id}`, {
             title,
             description,
             date,
@@ -56,7 +56,7 @@ const TareasEdit = () => {
           });
     
           console.log(response.data);
-          alert('tarea creado con éxito.');
+          alert('tarea actualizada con éxito.');
           navigate('/tareas');
         } catch (error) {
           if (error.response) {
@@ -73,7 +73,7 @@ const TareasEdit = () => {
       return (
         <div className="h-screen flex flex-col justify-center bg-white dark:bg-gray-900">
           <h1 className="text-4xl font-semibold text-primary-900 dark:text-white text-center mb-8">
-            Crear una nueva tarea
+            actualizar una tarea
           </h1>
           <form className="w-full max-w-md mx-auto" onSubmit={handleSubmit}>
             <div className="mb-5">
@@ -161,7 +161,7 @@ const TareasEdit = () => {
               type="submit"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              Crear
+              Guardar
             </button>
           </form>
         </div>

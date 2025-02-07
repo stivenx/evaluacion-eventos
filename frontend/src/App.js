@@ -17,6 +17,7 @@ import  TareasCreate from "./pages/tareasCreate";
 import TareasEdit from "./pages/tareasEdit"
 import Users from './pages/users';
 import TareasUser from './pages/tareasUser';
+import TareaDetail from './pages/tareaDetail';
 
 
 //components
@@ -41,6 +42,7 @@ function App() {
         <Route path="/tareas/edit/:id" element={<TareasEdit />} />
         <Route path="/users" element={<Users />} />
         <Route path="/tareas/user/:id" element={<TareasUser />} />
+        <Route path="/tarea/:id" element={<TareaDetail />} />
 
       </Routes>
       <Footer />
