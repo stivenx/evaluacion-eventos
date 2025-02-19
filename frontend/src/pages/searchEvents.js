@@ -15,7 +15,7 @@ const SearchEvents = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const nameParam = params.get("title") || "";
-        setQuery();
+        setQuery( );
 
         if (nameParam.length >= 3) {
             fetchEvents(nameParam);
