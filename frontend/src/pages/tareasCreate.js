@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import api from "../configApi/api";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +11,8 @@ const TareasCreate = () => {
     const [date, setDate] = useState('');
     const [priority, setPriority] = useState('');
     const [status, setStatus] = useState('');
-    const [user,setUser] = useState("")
+    const [user,setUser] = useState([]);
+    const [selectedUser, setSelectedUser] = useState('');
    
    
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ const TareasCreate = () => {
             date,
             priority,
             status,
-            user
+            user: selectedUser
           });
     
           console.log(response.data);
@@ -46,6 +47,20 @@ const TareasCreate = () => {
           }
         }
       };
+
+        useEffect(() => {
+              const fetchUsers = async () => {
+                  try {
+                      const response = await api.get("/users");
+                      setUser(response.data);
+                  } catch (error) {
+                      console.error("Error al obtener usuarios:", error);
+                  }
+              };
+      
+              fetchUsers();
+          }, []);
+
 
       return (
         <div className="h-screen flex flex-col justify-center bg-white dark:bg-gray-900">
@@ -93,46 +108,59 @@ const TareasCreate = () => {
               />
             </div>
             <div className="mb-5">
-              <label htmlFor="priory" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                priority:
+              <label htmlFor="priority" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Priority:
               </label>
-              <input
-                type="text"
-                id="priory"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              <select
+                id="priority"
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
-                placeholder="alta, mediana, baja"
                 required
-              />
-            </div>
-            <div className="mb-5">
-              <label htmlFor="status" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                status:
-              </label>
-              <input
-                type="text"
-                id="status"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                placeholder="en curso,pendiente, completada"
-                required
-              />
+              >
+                <option value="">Seleccione una prioridad</option>
+                <option value="alta">Alta</option>
+                <option value="mediana">Media</option>
+                <option value="baja">Baja</option>
+              </select>
             </div>
+              <div className="mb-5">
+                <label htmlFor="status" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Status:
+                </label>
+                <select
+                  id="status"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  required
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="">Seleccione un status</option>
+                  <option value="completada">Completada</option>
+                  <option value="En curso">En curso</option>
+                  <option value="Pendiente">Pendiente</option>
+                </select>
+              </div>
+            
             
             <div className="mb-5">
               <label htmlFor="user" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 user:
               </label>
-              <input
-                type="text"
-                id="user"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value={user}
-                onChange={(e) => setUser(e.target.value)}
-                required
-              />
+              <select
+              value={selectedUser}
+              onChange={(e) => setSelectedUser(e.target.value)}
+               required
+               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">Seleccione un usuario</option>
+                {user.map((user) => (
+                  <option key={user._id} value={user._id}>
+                    {user.userName}
+                  </option>
+                ))}
+              </select>
+
             </div>
             <button
               type="submit"

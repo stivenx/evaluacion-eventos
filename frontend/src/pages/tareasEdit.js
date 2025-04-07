@@ -13,7 +13,8 @@ const TareasEdit = () => {
     const [date, setDate] = useState('');
     const [priority, setPriority] = useState('');
     const [status, setStatus] = useState('');
-    const [user,setUser] = useState("")
+    const [user,setUser] = useState([]);
+    const [selectedUser, setSelectedUser] = useState('');
     const { id } = useParams();
    
    
@@ -32,7 +33,7 @@ const TareasEdit = () => {
             setPriority(tareaData.priority);
             setDate(formattedDate);
             setStatus(tareaData.status);
-            setUser(tareaData.user._id);
+            setSelectedUser(tareaData.user?._id || ""); // Establece el usuario de la tarea
             
           } catch (error) {
             console.error("Error al cargar el evento:", error);
@@ -41,6 +42,20 @@ const TareasEdit = () => {
     
         fetchTareas();
       }, [id]);
+
+      useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await api.get("/users");
+                setUser(response.data);
+            } catch (error) {
+                console.error("Error al obtener usuarios:", error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -52,7 +67,7 @@ const TareasEdit = () => {
             date,
             priority,
             status,
-            user
+            user:selectedUser
           });
     
           console.log(response.data);
@@ -116,47 +131,62 @@ const TareasEdit = () => {
               />
             </div>
             <div className="mb-5">
-              <label htmlFor="priory" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                priority:
+              <label htmlFor="priority" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Priority:
               </label>
-              <input
-                type="text"
-                id="priory"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              <select
+                id="priority"
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
-                placeholder="alta, mediana, baja"
                 required
-              />
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">Seleccione una prioridad</option>
+                <option value="alta">Alta</option>
+                <option value="mediana">Media</option>
+                <option value="baja">Baja</option>
+              </select>
             </div>
             <div className="mb-5">
               <label htmlFor="status" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                status:
+                  Estado:
               </label>
-              <input
-                type="text"
-                id="status"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                placeholder="en curso,pendiente, completada"
-                required
-              />
-            </div>
+              <select
+                  id="status"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  required
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                  <option value="">Seleccione un estado</option>
+                  <option value="completada">Completada</option>
+                  <option value="en curso">En curso</option>
+                  <option value="pendiente">Pendiente</option>
+              </select>
+          </div>
+
             
-            <div className="mb-5">
-              <label htmlFor="user" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                user:
-              </label>
-              <input
-                type="text"
-                id="user"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value={user}
-                onChange={(e) => setUser(e.target.value)}
-                required
-              />
-            </div>
+            
+              <div className="mb-5">
+                <label htmlFor="user" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Usuario:
+                </label>
+                <select
+                    id="user"
+                    value={selectedUser}
+                    onChange={(e) => setSelectedUser(e.target.value)}
+                    required
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                    <option value="">Seleccione un usuario</option>
+                    {user.map((user) => (
+                        <option key={user._id} value={user._id}>
+                            {user.userName}
+                        </option>
+                    ))}
+                </select>
+              </div>
+
             <button
               type="submit"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
