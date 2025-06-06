@@ -11,7 +11,7 @@ const TareaDetail = () => {
     const [date,setDate] = useState('');
     const [priority,setPriority] = useState('');
     const [status,setStatus] = useState('');
-    const [user,setUser] = useState('');
+    const [user,setUser] = useState([]);
     const navigate = useNavigate();
     
 
@@ -24,7 +24,7 @@ const TareaDetail = () => {
                 setDate(response.data.date);
                 setPriority(response.data.priority);
                 setStatus(response.data.status);
-                setUser(response.data.user.userName);
+                setUser(response.data.user);
             } catch (error) {
                 console.error("Error al obtener la tarea:", error);
             }
@@ -61,7 +61,9 @@ const TareaDetail = () => {
 
                         </span>
                 </p>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">Responsable: {user}</p>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">Responsable: {Array.isArray(user) && user.length > 0
+                                    ? user.map((u) => u.userName).join(", ")
+                                    : "Sin usuario"} </p>
                 <td className="px-6 py-4">
                      <button onClick={() => navigate(`/tareas/edit/${id}`)} className="text-primary-500 hover:underline">Edit</button>
                 </td>

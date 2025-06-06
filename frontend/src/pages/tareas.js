@@ -115,7 +115,12 @@ const Tareas = () => {
                               <td className="px-6 py-4">{tarea.description}</td>
                               <td className="px-6 py-4">{tarea.priority}</td>
                               <td className="px-6 py-4">{tarea.status}</td>
-                              <td className="px-6 py-4">{tarea.user?.userName || "Sin usuario"}</td>
+                              <td className="px-6 py-4">
+                                {Array.isArray(tarea.user) && tarea.user.length > 0
+                                    ? tarea.user.map((u) => u.userName).join(", ")
+                                    : "Sin usuario"}
+                                </td>
+
                               <td className="px-6 py-4">
                                   <button onClick={() => navigate(`/tareas/edit/${tarea._id}`)} className="text-primary-500 hover:underline">Edit</button>
                               </td>

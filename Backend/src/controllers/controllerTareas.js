@@ -91,3 +91,47 @@ exports.deleteTarea = async (req, res) => {
         res.status(500).json({ message: "Error al eliminar la tarea" });
     }
 };
+
+
+
+exports.getUsuariosConDosTareasOMenos = async (req, res) => {
+  try {
+    const resultado = await Tarea.aggregate([
+      {
+        $group: {
+          _id: "$user",           // agrupamos por el campo user (ID del usuario)
+          totalTareas: { $sum: 1 } // contamos las tareas
+        }
+      },
+      {
+        $match: {
+          totalTareas: { $lte: 2 } // solo los que tienen 2 tareas o menos
+        }
+      },
+      {
+        $lookup: {
+          from: "users",           // nombre de la colección de usuarios (en minúsculas y plural por defecto)
+          localField: "_id",       // campo en este resultado (el user ID)
+          foreignField: "_id",     // campo en User
+          as: "usuer"
+        }
+      },
+      {
+        $unwind: "$user"        // descomprime el array de usuario para tener un objeto simple
+      },
+      {
+        $project: {
+          _id: 0,
+          userId: "$user._id",
+          userName: "$user.userName",
+          totalTareas: 1
+        }
+      }
+    ]);
+
+    res.status(200).json(resultado);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener los usuarios con dos tareas o menos" });
+  }
+};

@@ -69,7 +69,9 @@ const TareasUser = () => {
             <span className="font-semibold">Prioridad:</span> {tarea.priority}
           </p>
           <p>
-            <span className="font-semibold">Responsable:</span> {tarea.user.userName}
+            <span className="font-semibold">Responsable:</span> {Array.isArray(tarea.user) && tarea.user.length > 0
+                                    ? tarea.user.map((u) => u.userName).join(", ")
+                                    : "Sin usuario"} 
           </p>
           <button
               onClick={() => navigate(`/tarea/${tarea._id}`)}
